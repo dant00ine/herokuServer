@@ -3,15 +3,7 @@ class ApiController < ApplicationController
   before_filter :check_for_valid_authtoken, :except => [:signup, :signin, :get_token]
 
   def signup
-
-      puts "********** BUT WILL PUTS WORK**********" 
-      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
-      logger.debug params
-      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
-
-
     if request.post?
-        puts "******request.post indeed!**********"
       if params && params[:full_name] && params[:email] && params[:password]
 
         params[:user] = Hash.new
@@ -50,6 +42,13 @@ class ApiController < ApplicationController
   end
 
   def signin
+
+      puts "********** BUT WILL PUTS WORK**********"
+      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
+      logger.debug params
+      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
+
+
     if request.post?
       if params && params[:email] && params[:password]
         user = User.where(:email => params[:email]).first
