@@ -8,19 +8,21 @@ Rails.application.routes.draw do
   post 'api/reset_password'
 
   post 'api/upload_photo'
-  get 'api/get_photos'
   delete 'api/delete_photo'
-    
-  get 'api/get_token'  
+
+  get 'api/get_token'
   get 'api/clear_token'
-    
+
+  get 'api/start_home_feed'
+  get 'api/user_profile_photos'
+
   match "*path", to: "application#page_not_found", via: :all
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # 
+  #
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

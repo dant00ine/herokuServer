@@ -43,13 +43,6 @@ class ApiController < ApplicationController
   end
 
   def signin
-
-      puts "********** BUT WILL PUTS WORK**********"
-      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
-      logger.debug params
-      logger.debug "**********WHAT HAVE WE FOR PARAMS**********"
-
-
     if request.post?
       if params && params[:email] && params[:password]
         user = User.where(:email => params[:email]).first
@@ -245,7 +238,17 @@ class ApiController < ApplicationController
     end
   end
 
-  def get_photos
+  def start_home_feed
+      if @user && @user.authtoken_expiry > Time.now
+          photos = Photo.all.limit(10)
+          render :json => photos.to_json, :stats => 200
+      else
+          e = Error.new(:status => 401, :message => "Authtoken has expired. Please get a new token and try again!")
+          render :json => e.to_json, :status => 401
+      end
+  end
+
+  def user_profile_photos
     if @user && @user.authtoken_expiry > Time.now
       photos = @user.photos
       render :json => photos.to_json, :status => 200
