@@ -5,11 +5,10 @@ class ApiController < ApplicationController
 
   def signup
     if request.post?
-      if params && params[:full_name] && params[:email] && params[:password]
+      if params && params[:username] && params[:email] && params[:password]
 
         params[:user] = Hash.new
-        params[:user][:first_name] = params[:full_name].split(" ").first
-        params[:user][:last_name] = params[:full_name].split(" ").last
+        params[:user][:username] = params[:username]
         params[:user][:email] = params[:email]
 
         begin
@@ -153,7 +152,7 @@ class ApiController < ApplicationController
 
   def upload_photo
     if request.post?
-      if params[:title] && params[:image]
+      if params[:caption] && params[:image] && params[:location]
         if @user && @user.authtoken_expiry > Time.now
           rand_id = rand_string(40)
           image_name = params[:image].original_filename
@@ -172,7 +171,12 @@ class ApiController < ApplicationController
             s3_obj.write(image, :acl => :public_read)
             image_url = s3_obj.public_url.to_s
 
-            photo = Photo.new(:name => image_name, :user_id => @user.id, :title => params[:title], :image_url => image_url, :random_id => rand_id)
+            photo = Photo.new(:name => image_name,
+                              :user_id => @user.id,
+                              :caption => params[:caption],
+                              location: params[:location],
+                              :image_url => image_url,
+                              :random_id => rand_id)
 
             if photo.save
               render :json => photo.to_json
